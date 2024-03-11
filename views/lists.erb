@@ -4,7 +4,7 @@
       <a href="/lists/<%= list[:id] %>">
         <h2><%= list[:name] %></h2>
         <p>
-          <%= todos_remaining_count(list) %> / <%= todos_count(list) %>
+          <%= list[:todos_remaining_count] %> / <%= list[:todos_count] %>
         </p>
       </a>
     </li>
@@ -14,3 +14,4 @@
 <% content_for :header_links do %>
   <a class="add" href="/lists/new">New List</a>
 <% end %>
+ 
