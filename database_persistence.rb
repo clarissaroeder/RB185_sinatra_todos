@@ -3,8 +3,17 @@ require "pg"
 # This class encapsulates all of the interactions with the database
 class DatabasePersistence
   def initialize(logger)
-    @db = PG.connect(dbname: "todos")
+    @db = if Sinatra::Base.production?
+      PG.connect(ENV['DATABASE_URL'])
+    else
+      PG.connect(dbname: "todos")
+    end
+
     @logger = logger
+  end
+
+  def disconnect
+    @db.close
   end
 
   # will log and execute the SQL statement

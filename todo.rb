@@ -1,5 +1,4 @@
 require "sinatra"
-require "sinatra/reloader"
 require "sinatra/content_for"
 require "tilt/erubis"
 
@@ -138,8 +137,7 @@ end
 post "/lists/:id" do
   list_name = params[:list_name].strip
   id = params[:id].to_i
-  @list = load_list(id) # ! is this line necessary? maybe for the view template?
-
+  @list = load_list(id)
   error = error_for_list_name(list_name)
   if error
     session[:error] = error
@@ -169,7 +167,7 @@ end
 # Add a new todo to a list
 post "/lists/:list_id/todos" do
   @list_id = params[:list_id].to_i
-  @list = load_list(@list_id) # ! is this line necessary? maybe for the view template?
+  @list = load_list(@list_id)
   text = params[:todo].strip
 
   error = error_for_todo(text)
@@ -222,4 +220,8 @@ post "/lists/:id/complete_all" do
   @storage.complete_all_todos(@list_id)
   session[:success] = "All todos have been completed."
   redirect "/lists/#{@list_id}"
+end
+
+after do
+  @storage.disconnect
 end
